@@ -1,10 +1,15 @@
 import 'package:chatapp/model/chat_model.dart';
 import 'package:chatapp/model/story_model.dart';
 import 'package:chatapp/views/chat.dart';
+import 'package:chatapp/views/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chatapp/data/data.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Home extends StatefulWidget {
+  final String currentuserId;
+  Home({Key key, @required this.currentuserId}) : super(key: key);
   @override
   _HomeState createState() => _HomeState();
 }
@@ -12,13 +17,22 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<StoryModel> stories = new List();
   List<ChatModel> chats = new List();
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     stories = getStories();
     chats = getChats();
+  }
+
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+  Future<Null> logoutuser() async {
+    await FirebaseAuth.instance.signOut();
+    await googleSignIn.disconnect();
+    await googleSignIn.signOut();
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+        (Route<dynamic> route) => false);
   }
 
   @override
@@ -52,6 +66,18 @@ class _HomeState extends State<Home> {
                       child: Icon(
                         Icons.add,
                         color: Colors.white,
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: Color(0xff444446),
+                          borderRadius: BorderRadius.circular(12)),
+                      child: RaisedButton.icon(
+                        icon: Icon(Icons.power_settings_new),
+                        color: Colors.white,
+                        onPressed: logoutuser,
+                        label: Text("Signed Out"),
                       ),
                     ),
                   ],

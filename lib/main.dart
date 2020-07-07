@@ -1,6 +1,7 @@
 import 'package:chatapp/views/chat.dart';
 import 'package:chatapp/views/home.dart';
 import 'package:flutter/material.dart';
+import 'package:chatapp/views/login.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: ChatScreen(),
+      home: LoginScreen(),
     );
   }
 }
